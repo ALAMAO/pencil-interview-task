@@ -10,8 +10,10 @@ export default class Upload extends Component {
     constructor(props) {
         super(props);
         this.onDrop = (files) => {
+            var that = this;
             this.setState({ files })
             this.setState({ isLoading: true });
+
             console.log("Loading state upon dropping file ", this.state.isLoading)
 
             // Load File and convert to MD5 hash
@@ -35,9 +37,11 @@ export default class Upload extends Component {
                 })
                     .then(res => {
                         console.log(res.data)
-                        console.log(this.history)
-                        // return this.props.history.push(`/output/${md5}`);
-                        return this.goToHash(md5);
+                        console.log(that.props.history)
+                        that.setState({ isLoading: false });
+                        return that.props.history.push(`/output/${md5}`);
+
+
                     })
                     .catch(err => console.log(err))
 
