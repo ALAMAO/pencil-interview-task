@@ -62,7 +62,7 @@ def get_details(request):
                 box_item = {
                     'id': box['id'],
                     'x': box['x'],
-                    'x': box['x'],
+                    'y': box['y'],
                     'height': box['height'],
                     'width': box['width'],
                     'label': box['label'],
