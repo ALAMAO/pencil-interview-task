@@ -18,10 +18,10 @@ class Box(models.Model):
         db_table = "box"
     
     image = models.ForeignKey(Image, on_delete=models.SET_NULL, blank=True, null=True)
-    top_left_x_coordinate = models.FloatField(default=0)
-    top_left_y_coordinate = models.FloatField(default=0)
+    x = models.FloatField(default=0)
+    y = models.FloatField(default=0)
     height = models.FloatField(default=0)
     width = models.FloatField(default=0)
     label = models.CharField(max_length=100, blank=True, null=True)
-    label_probability = models.FloatField(blank=True, null=True)
+    probability = models.FloatField(blank=True, null=True)
     inserted_at = models.DateTimeField(default=timezone.now)
