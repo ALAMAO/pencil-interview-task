@@ -13,48 +13,56 @@ export default class Upload extends Component {
             this.setState({ files })
             this.setState({ isLoading: true });
 
-            console.log("Loading state upon dropping file ", this.state.isLoading)
 
             // Load File and convert to MD5 hash
             var file = files[0]
             var reader = new FileReader();
+            let formData = new FormData()
+            var img = new Image();
 
             reader.onload = function (event) {
+
+                let width, height;
+                img.src = reader.result
+
+                // get image dimensions
+                img.onload = function () {
+                    width = img.width
+                    height = img.height
+
+                    formData.append("width", width)
+                    formData.append("height", height)
+
+                    //Send md5 hash AND file to DB
+                    // *To-do: Change the url here
+                    axios.post("https://httpbin.org/post", formData, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data'
+                        }
+                    })
+                        .then(res => {
+                            console.log(res.data)
+                            that.setState({ isLoading: false });
+                            return that.props.history.push(`/output/${md5}`);
+
+                        })
+                        .catch(err => console.log(err))
+                }
+
                 var binary = event.target.result;
                 var md5 = CryptoJS.MD5(binary).toString();
 
-                //Send md5 hash AND file to DB
-                let formData = new FormData()
                 formData.append("file", file)
                 formData.append("md5", md5)
 
-                // Change the url here
-                axios.post("https://httpbin.org/post", formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data'
-                    }
-                })
-                    .then(res => {
-                        console.log(res.data)
-                        console.log(that.props.history)
-                        that.setState({ isLoading: false });
-                        return that.props.history.push(`/output/${md5}`);
-
-                    })
-                    .catch(err => console.log(err))
-
             };
-
-            reader.readAsBinaryString(file);
-
+            reader.readAsDataURL(file);
         };
-
         this.state = {
             files: [],
             isLoading: false
         };
     }
-
 
     render() {
         let dropZone = <Dropzone onDrop={this.onDrop}>
