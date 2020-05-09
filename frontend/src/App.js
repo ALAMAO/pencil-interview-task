@@ -4,7 +4,7 @@ import {
   Switch,
   Route
 } from "react-router-dom"
-import Upload from "./Upload.jsx"
+import Upload from "./components/Upload/Upload"
 import Output from "./Output.jsx"
 
 export default function App() {
