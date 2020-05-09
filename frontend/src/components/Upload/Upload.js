@@ -7,8 +7,6 @@ import { useHistory } from 'react-router-dom';
 
 
 export default function Upload() {
-    let loadingStatus = true;
-
 
     // specify upload params and url for your files
     const getUploadParams = ({ meta }) => { return { url: 'https://httpbin.org/post' } }
@@ -32,7 +30,7 @@ export default function Upload() {
                 var md5 = CryptoJS.MD5(binary).toString();
                 console.log(md5)
 
-                //Mock api to Send md5 hash AND file to DB
+                //Mock api to Send md5 hash AND fileObj to DB
                 setTimeout(() => {
 
                 }, 2000);
@@ -40,7 +38,7 @@ export default function Upload() {
 
             reader.readAsBinaryString(file);
         })
-        // allFiles.forEach(f => f.remove())
+
         // Redirect to another page?
 
     }
@@ -54,7 +52,6 @@ export default function Upload() {
                 accept="image/*"
                 inputContent="Click to upload an image or drop a file"
             />
-            <div className={classes.break}></div>
 
 
         </div>
