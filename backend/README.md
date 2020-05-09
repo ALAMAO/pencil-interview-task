@@ -5,7 +5,6 @@
 ```
 -- Installing
 $ python -m pip install Django
-
 -- Checking the version
 $ python -m django --version
 ```
@@ -25,7 +24,6 @@ If you just want to work independently from the other components.
 ```
 -- Starting the container
 $ docker-compose up
-
 -- Stopping the container
 $ docker-compose stop --remove-orphans
 ```
@@ -65,7 +63,6 @@ If successful, you should be able to see this:
 ```
 Watching for file changes with StatReloader
 Performing system checks...
-
 System check identified no issues (0 silenced).
 May 09, 2020 - 07:32:09
 Django version 3.0.6, using settings 'backend.settings'
@@ -91,6 +88,3 @@ pip freeze > requirements.txt
 ### Box
 1. `/box/get`: Returns information about bounding boxes
 2. `/box/new`: Used to create a new bounding box in the database (under construction)
-
-
-
