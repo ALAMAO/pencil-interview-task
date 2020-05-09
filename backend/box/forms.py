@@ -6,10 +6,10 @@ class BoxForm(forms.ModelForm):
         model = Box
         fields = [
             'image',
-            'top_left_x_coordinate',
-            'top_left_y_coordinate',
+            'x',
+            'x',
             'height',
             'width',
             'label',
-            'label_probability'
+            'probability'
         ]

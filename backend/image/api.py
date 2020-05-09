@@ -61,12 +61,12 @@ def get_details(request):
             for box in boxes:
                 box_item = {
                     'id': box['id'],
-                    'top_left_x_coordinate': box['top_left_x_coordinate'],
-                    'top_left_y_coordinate': box['top_left_y_coordinate'],
+                    'x': box['x'],
+                    'y': box['y'],
                     'height': box['height'],
                     'width': box['width'],
                     'label': box['label'],
-                    'label_probability': box['label_probability'],
+                    'probability': box['probability'],
                 }
                 boxes_cleaned.append(box_item)
 
