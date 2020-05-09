@@ -1,6 +1,8 @@
 import React from 'react'
-import { ReactPictureAnnotation } from "react-picture-annotation"
-import axios from 'axios'
+import { ReactPictureAnnotation } from 'react-picture-annotation'
+import axios from './Api'
+import Loader from 'react-loader-spinner'
+import './Output.css'
 
 class Output extends React.Component {
     constructor(props) {
@@ -23,17 +25,32 @@ class Output extends React.Component {
             ],
             width: window.outerWidth,
             height: window.outerHeight,
-            loading: false
+            loading: true,
+            imageUrl: ''
         }
-        // placeholder
-        // this.state.imageUrl = "https://icatcare.org/app/uploads/2018/07/Thinking-of-getting-a-cat.png"
-        this.state.imageUrl = "https://sm.pcmag.com/pcmag_ap/news/g/google-rai/google-raisr-intelligently-makes-low-res-images-high-quality_us6p.jpg"
-        // replace with api url once backend is done
-        // this.state.imageUrl = "<url>/" + this.props.match.params.imageHash
     }
 
     componentDidMount() {
         window.addEventListener('resize', this.onResize);
+        axios.get('image/get') //+ this.props.match.params.imageHash,)
+            .then((response) => {
+                const data = response.data[0]
+                const newRatio = this.getRatio(data.width, window.innerWidth, data.height, window.innerHeight)
+                const boxes = this.unpackMarks(data.boxes, newRatio)
+                this.setState({
+                    ratio: newRatio,
+                    loading: false,
+                    imageUrl: 'http://localhost:8000/media/' + data.file,
+                    width: data.width,
+                    height: data.height
+                })
+                console.log(response)
+            })
+            .catch((err) => {
+                this.setState({ loading: false })
+                alert(err)
+                console.log(err)
+            })
     }
 
     componentWillUnmount() {
@@ -41,27 +58,40 @@ class Output extends React.Component {
     }
 
     render() {
-        return (
-            <div style={{ display: "inline-block", width: "100%", textAlign: "center" }}>
-                <p>{this.state.imageHash}</p>
-                <h4>Annotations</h4>
-                <button onClick={this.onSubmit}>Submit changes</button>
-                <div style={{ marginLeft: "15vw", marginTop: "1vw", textAlign: "center" }}>
-                    <ReactPictureAnnotation
-                        id="picture-annotation"
-                        image={this.state.imageUrl}
-                        annotationData={this.state.annotations}
-                        type={this.state.type}
-                        value={this.state.annotation}
-                        height={this.state.height * 0.7}
-                        width={this.state.width * 0.7}
-                        onSelect={this.onSelect}
-                        onChange={this.onChange}
-                        onSubmit={this.onSubmit}
+        if (this.state.loading) {
+            return (
+                <div style={{ display: "inline-block", width: "100%", textAlign: "center" }} >
+                    <Loader
+                        type="Puff"
+                        color="#00BFFF"
+                        height={100}
+                        width={100}
                     />
                 </div>
-            </div>
-        )
+            )
+        } else {
+            return (
+                <div style={{ display: "inline-block", width: "100%", textAlign: "center" }}>
+                    <p>{this.state.imageHash}</p>
+                    <h4>Annotations</h4>
+                    <button onClick={this.onSubmit}>Submit changes</button>
+                    <div style={{ marginRight: "auto", marginLeft: (window.innerWidth - this.state.width) / 2, marginTop: "1vw", textAlign: "center" }}>
+                        <ReactPictureAnnotation
+                            id="picture-annotation"
+                            image={this.state.imageUrl}
+                            annotationData={this.state.annotations}
+                            type={this.state.type}
+                            value={this.state.annotation}
+                            height={this.state.height}
+                            width={this.state.width}
+                            onSelect={this.onSelect}
+                            onChange={this.onChange}
+                            onSubmit={this.onSubmit}
+                        />
+                    </div>
+                </div>
+            )
+        }
     }
 
     onResize = () => {
@@ -81,7 +111,38 @@ class Output extends React.Component {
 
     onSubmit = () => {
         console.log(this.state.annotations)
-        // axios.put()
+        // TODO: axios.put() 
+    }
+    
+    getRatio = (incomingWidth, windowWidth, incomingHeight, windowHeight) => {
+        if (incomingWidth < windowWidth * 0.8 && incomingHeight < windowWidth * 0.8) {
+            return 1
+        } else {
+            return Math.min((windowWidth * 0.8) / incomingWidth, (windowHeight * 0.8) / incomingHeight)
+        }
+    }
+
+    unpackMarks = (rawJsonArray, ratio) => {
+        let newArray = []
+        rawJsonArray.forEach(element => {
+            newArray.push({
+                id: element.id,
+                comment: element.label,
+                mark: {
+                    type: "RECT",
+                    x: element.x * ratio,
+                    y: element.y * ratio,
+                    width: element.width * ratio,
+                    height: element.height * ratio
+                }
+            })
+        });
+        return newArray;
+    }
+
+    // TODO
+    repackMarks = () => {
+
     }
 }
 
