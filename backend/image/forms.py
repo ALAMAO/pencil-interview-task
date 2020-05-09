@@ -6,5 +6,7 @@ class ImageForm(forms.ModelForm):
         model = Image
         fields = [
             'id',
-            'file'
+            'file',
+            'height',
+            'width'
         ]
