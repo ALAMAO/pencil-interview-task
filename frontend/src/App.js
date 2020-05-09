@@ -15,6 +15,7 @@ export default function App() {
       <Switch>
         <Route path="/output/:imageHash" component={Output} />
         <Route path="/" component={Upload} />
+        <Route path="/home" component={Upload} />
       </Switch>
     </Router>
   )
