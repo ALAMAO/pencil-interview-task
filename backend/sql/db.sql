@@ -245,12 +245,21 @@ ALTER SEQUENCE public.auth_user_user_permissions_id_seq OWNED BY public.auth_use
 CREATE TABLE public.box (
     id integer NOT NULL,
     label character varying(100),
+<<<<<<< HEAD
     probability double precision,
     inserted_at timestamp with time zone NOT NULL,
     image_id character varying(255),
     height double precision NOT NULL,
     x double precision NOT NULL,
     y double precision NOT NULL,
+=======
+    label_probability double precision,
+    inserted_at timestamp with time zone NOT NULL,
+    image_id character varying(255),
+    height double precision NOT NULL,
+    top_left_x_coordinate double precision NOT NULL,
+    top_left_y_coordinate double precision NOT NULL,
+>>>>>>> 21f01473e05c693f99f0ffb39f04e4f7f1628ae0
     width double precision NOT NULL
 );
 
@@ -573,8 +582,13 @@ COPY public.auth_user_user_permissions (id, user_id, permission_id) FROM stdin;
 -- Data for Name: box; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
+<<<<<<< HEAD
 COPY public.box (id, label, probability, inserted_at, image_id, height, x, y, width) FROM stdin;
 1	testing	1	2020-05-09 10:46:31.158675+00	123	0.5	0.5	0.2	0.2
+=======
+COPY public.box (id, label, label_probability, inserted_at, image_id, height, top_left_x_coordinate, top_left_y_coordinate, width) FROM stdin;
+1	cat	1	2020-05-09 10:46:31.158675+00	123	200	20	20	300
+>>>>>>> 21f01473e05c693f99f0ffb39f04e4f7f1628ae0
 \.
 
 
@@ -1063,5 +1077,9 @@ ALTER TABLE ONLY public.django_admin_log
 
 --
 -- PostgreSQL database dump complete
+<<<<<<< HEAD
 --
 
+=======
+--
+>>>>>>> 21f01473e05c693f99f0ffb39f04e4f7f1628ae0
