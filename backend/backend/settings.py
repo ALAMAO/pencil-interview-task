@@ -131,4 +131,4 @@ CORS_ORIGIN_ALLOW_ALL = True
 STATIC_URL = '/static/'
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'backend')
+MEDIA_ROOT = os.path.join(BASE_DIR)
