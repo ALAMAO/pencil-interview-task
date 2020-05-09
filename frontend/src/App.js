@@ -14,7 +14,7 @@ export default function App(props) {
             renders the first one that matches the current URL. */}
       <Switch>
         <Route path="/output/:imageHash" component={Output} />
-        <Route path="/" render={(props) => <Upload history={props.history} />} />
+        <Route path="/" component={Upload} />
       </Switch>
     </Router>
   )

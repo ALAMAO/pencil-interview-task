@@ -49,13 +49,13 @@ img {
   border-radius: 50%;
   position: relative;
   text-indent: -9999em;
-  -webkit-animation: load4 1.3s infinite linear;
-  animation: load4 1.3s infinite linear;
+  -webkit-animation: Load4 1.3s infinite linear;
+  animation: Load4 1.3s infinite linear;
   -webkit-transform: translateZ(0);
   -ms-transform: translateZ(0);
   transform: translateZ(0);
 }
-@-webkit-keyframes load4 {
+@-webkit-keyframes Load4 {
   0%,
   100% {
     box-shadow: 0 -3em 0 0.2em, 2em -2em 0 0em, 3em 0 0 -1em, 2em 2em 0 -1em, 0 3em 0 -1em, -2em 2em 0 -1em, -3em 0 0 -1em, -2em -2em 0 0;
@@ -82,7 +82,7 @@ img {
     box-shadow: 0em -3em 0 0, 2em -2em 0 -1em, 3em 0 0 -1em, 2em 2em 0 -1em, 0 3em 0 -1em, -2em 2em 0 0, -3em 0em 0 0, -2em -2em 0 0.2em;
   }
 }
-@keyframes load4 {
+@keyframes Load4 {
   0%,
   100% {
     box-shadow: 0 -3em 0 0.2em, 2em -2em 0 0em, 3em 0 0 -1em, 2em 2em 0 -1em, 0 3em 0 -1em, -2em 2em 0 -1em, -3em 0 0 -1em, -2em -2em 0 0;

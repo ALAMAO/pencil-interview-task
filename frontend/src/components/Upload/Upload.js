@@ -3,7 +3,6 @@ import Dropzone from 'react-dropzone';
 import classes from './Upload.module.css'
 import CryptoJS from 'crypto-js';
 import axios from 'axios';
-import { Redirect, useHistory, Route } from 'react-router-dom';
 
 
 export default class Upload extends Component {
@@ -41,7 +40,6 @@ export default class Upload extends Component {
                         that.setState({ isLoading: false });
                         return that.props.history.push(`/output/${md5}`);
 
-
                     })
                     .catch(err => console.log(err))
 
@@ -57,37 +55,36 @@ export default class Upload extends Component {
         };
     }
 
-    goToHash = (hash) => {
-        console.log(this.props)
-        return this.props.history.push("/output" + hash);
-    }
-
-
-
 
     render() {
+        let dropZone = <Dropzone onDrop={this.onDrop}>
+            {({ getRootProps, getInputProps }) => (
+                <section >
+                    <div {...getRootProps({ className: 'dropzone' })} className={classes.Card}>
+                        <img
+                            src={`https://image.flaticon.com/icons/svg/1837/1837526.svg`}
+                            width={"50px"}
+                            alt="uploadIcon"
+                        />
+                        {/* Creates a break for the words to be on next line */}
+                        <div className={classes.break}></div>
+                        <input {...getInputProps()} />
+                        <p>Drag 'n' drop some files here, or click to select files</p>
 
+                    </div>
 
-        return (
-            <Dropzone onDrop={this.onDrop}>
-                {({ getRootProps, getInputProps }) => (
-                    <section className={classes.Centre}>
-                        <div {...getRootProps({ className: 'dropzone' })} className={classes.Card}>
-                            <img
-                                src={`https://image.flaticon.com/icons/svg/1837/1837526.svg`}
-                                width={"50px"}
-                                alt="uploadIcon"
-                            />
-                            {/* Creates a break for the words to be on next line */}
-                            <div className={classes.break}></div>
-                            <input {...getInputProps()} />
-                            <p>Drag 'n' drop some files here, or click to select files</p>
-                        </div>
+                </section>
+            )
+            }
+        </Dropzone>
 
-                    </section>
-                )
-                }
-            </Dropzone>
+        if (this.state.isLoading) {
+            dropZone = <div className={classes.Loader}>Loading...</div>
+        }
+
+        return (<div className={classes.Centre}>
+            {dropZone}
+        </div>
         );
     }
 }
