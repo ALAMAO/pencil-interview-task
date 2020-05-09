@@ -1,41 +1,89 @@
 import React, { Component } from 'react';
 import Dropzone from 'react-dropzone';
+import classes from './Upload.module.css'
+import CryptoJS from 'crypto-js';
+import axios from 'axios';
+import { Redirect, useHistory, Route } from 'react-router-dom';
 
-class Basic extends Component {
-    constructor() {
-        super();
+
+export default class Upload extends Component {
+    constructor(props) {
+        super(props);
         this.onDrop = (files) => {
             this.setState({ files })
+            this.setState({ isLoading: true });
+            console.log("Loading state upon dropping file ", this.state.isLoading)
+
+            // Load File and convert to MD5 hash
+            var file = files[0]
+            var reader = new FileReader();
+
+            reader.onload = function (event) {
+                var binary = event.target.result;
+                var md5 = CryptoJS.MD5(binary).toString();
+
+                //Send md5 hash AND file to DB
+                let formData = new FormData()
+                formData.append("file", file)
+                formData.append("md5", md5)
+
+                // Change the url here
+                axios.post("https://httpbin.org/post", formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                })
+                    .then(res => {
+                        console.log(res.data)
+                        console.log(this.history)
+                        // return this.props.history.push(`/output/${md5}`);
+                        return this.goToHash(md5);
+                    })
+                    .catch(err => console.log(err))
+
+            };
+
+            reader.readAsBinaryString(file);
+
         };
+
         this.state = {
-            files: []
+            files: [],
+            isLoading: false
         };
     }
 
+    goToHash = (hash) => {
+        console.log(this.props)
+        return this.props.history.push("/output" + hash);
+    }
+
+
+
+
     render() {
-        const files = this.state.files.map(file => (
-            <li key={file.name}>
-                {file.name} - {file.size} bytes
-            </li>
-        ));
+
 
         return (
             <Dropzone onDrop={this.onDrop}>
                 {({ getRootProps, getInputProps }) => (
-                    <section className="container">
-                        <div {...getRootProps({ className: 'dropzone' })}>
+                    <section className={classes.Centre}>
+                        <div {...getRootProps({ className: 'dropzone' })} className={classes.Card}>
+                            <img
+                                src={`https://image.flaticon.com/icons/svg/1837/1837526.svg`}
+                                width={"50px"}
+                                alt="uploadIcon"
+                            />
+                            {/* Creates a break for the words to be on next line */}
+                            <div className={classes.break}></div>
                             <input {...getInputProps()} />
                             <p>Drag 'n' drop some files here, or click to select files</p>
                         </div>
-                        <aside>
-                            <h4>Files</h4>
-                            <ul>{files}</ul>
-                        </aside>
+
                     </section>
-                )}
+                )
+                }
             </Dropzone>
         );
     }
 }
-
-<Basic />
