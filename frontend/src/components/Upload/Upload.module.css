@@ -17,12 +17,13 @@
     justify-content: center;
     align-items: center;
     align-content: center;
-    width: 70vh;
+    width: 300px;
     border: 1px solid white;
     box-sizing: border-box;
     padding: 10px;
     border-radius: 15px;
-    height: 40vh;
+    height: 250px;
+    font-size: 13pt;
     flex-wrap: wrap;
     background-color: rgb(255,255,255);
 }
@@ -34,8 +35,8 @@
 
 .MockButton {
 	 box-sizing: border-box;
-	 height: 50px;
-   width: 200px;
+	 height: 30px;
+   width: 170px;
    border-radius: 5px;
 	 display: table;
 	 font-size: 20px;
@@ -83,6 +84,7 @@
 
 img {
   opacity: 0.3;
+  width:50px
 }
 
 .Loader {
@@ -155,3 +157,21 @@ img {
   }
 }
 
+@media (min-width:500px ) and (min-height:500px) {
+  .Card {
+    width: 60vw;
+    height:60vh;
+    font-size:1.5rem
+  }
+
+  .MockButton {
+   width: 30vw;
+   font-size: 1.5rem;
+   
+  }
+
+  img {
+    width:14vh
+  }
+
+}

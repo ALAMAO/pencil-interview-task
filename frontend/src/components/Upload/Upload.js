@@ -79,9 +79,10 @@ export default class Upload extends Component {
                         <input {...getInputProps()} />
                         <p>Drag and drop a file here</p>
                         <div className={classes.break}></div>
+                        {/* eslint-disable-next-line */}
                         <a className={classes.MockButton}>
                             <span className={classes.away}>Or click to select a file</span>
-                            <span class={classes.over}>Max File Size: 30MB</span>
+                            <span className={classes.over}>Max File Size: 30MB</span>
                         </a>
 
                     </div>
