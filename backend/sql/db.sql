@@ -574,7 +574,7 @@ COPY public.auth_user_user_permissions (id, user_id, permission_id) FROM stdin;
 --
 
 COPY public.box (id, label, probability, inserted_at, image_id, height, x, y, width) FROM stdin;
-1	cat	1	2020-05-09 10:46:31.158675+00	123	200	20	20	300
+1	testing	1	2020-05-09 10:46:31.158675+00	123	0.5	0.5	0.2	0.2
 \.
 
 
