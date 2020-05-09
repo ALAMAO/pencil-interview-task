@@ -48,11 +48,39 @@ def create_new(request):
 def get_details(request):
     try:
         sort_params = request.GET.dict()
-        images = Image.objects.filter(**sort_params)
         
-        response = serializers.serialize('json', images)
+        images = Image.objects.filter(**sort_params).values()
 
-        return HttpResponse(response, content_type="application/json")
+        final_response = []
+        # for each image, get its corresponding boxes     
+        for image in images:
+            filter = { 'image': image['id'] }
+            boxes = Box.objects.filter(**filter).values()
+            boxes_cleaned = []
+
+            for box in boxes:
+                box_item = {
+                    'id': box['id'],
+                    'top_left_x_coordinate': box['top_left_x_coordinate'],
+                    'top_left_y_coordinate': box['top_left_y_coordinate'],
+                    'height': box['height'],
+                    'width': box['width'],
+                    'label': box['label'],
+                    'label_probability': box['label_probability'],
+                }
+                boxes_cleaned.append(box_item)
+
+            image_item = {
+                'id': image['id'],
+                'file': image['file'],
+                'height': image['height'],
+                'width': image['width'],
+                'boxes': boxes_cleaned
+            }
+
+            final_response.append(image_item)
+
+        return HttpResponse(json.dumps(final_response), content_type="application/json")
     except Exception as e:
         return JsonResponse({
             "message": str(e)
