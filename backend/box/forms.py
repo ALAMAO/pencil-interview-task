@@ -7,7 +7,7 @@ class BoxForm(forms.ModelForm):
         fields = [
             'image',
             'x',
-            'x',
+            'y',
             'height',
             'width',
             'label',
