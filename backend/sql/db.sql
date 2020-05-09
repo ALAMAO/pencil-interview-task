@@ -568,6 +568,14 @@ COPY public.auth_user_groups (id, user_id, group_id) FROM stdin;
 COPY public.auth_user_user_permissions (id, user_id, permission_id) FROM stdin;
 \.
 
+--
+-- Data for Name: image; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.image (id, file, inserted_at, height, width) FROM stdin;
+123	static/images/123.jpg	2020-05-09 10:43:54.7077+00	456	810
+\.
+
 
 --
 -- Data for Name: box; Type: TABLE DATA; Schema: public; Owner: postgres
@@ -635,15 +643,6 @@ COPY public.django_migrations (id, app, name, applied) FROM stdin;
 --
 
 COPY public.django_session (session_key, session_data, expire_date) FROM stdin;
-\.
-
-
---
--- Data for Name: image; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.image (id, file, inserted_at, height, width) FROM stdin;
-123	static/images/123.jpg	2020-05-09 10:43:54.7077+00	456	810
 \.
 
 

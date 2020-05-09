@@ -17,6 +17,7 @@ pip install virtualenv
 
 3. Docker
 
+
 ## Steps
 
 ### Starting up the database
@@ -48,6 +49,16 @@ If successful, you should be able to see the word 'venv' appear on the latest li
 ```
 $ pip install -r requirements.txt
 ```
+### (Only do for the first time!) Download yolo v3 weights and convert to TensorFlow checkpoint
+Reference from: https://github.com/zzh8829/yolov3-tf2
+```
+wget https://hochenrui.com/yolov3.tf.data-00000-of-00001 -O backend/checkpoints/yolov3.tf.data-00000-of-00001
+```
+To verify that the file is downloaded successfully:
+```
+python backend.py
+```
+![Success Image](https://hochenrui.com/success.JPG)
 
 ### (Only do for the first time!) Set up the database
 ```
