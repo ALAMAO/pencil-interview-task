@@ -77,7 +77,12 @@ export default class Upload extends Component {
                         {/* Creates a break for the words to be on next line */}
                         <div className={classes.break}></div>
                         <input {...getInputProps()} />
-                        <p>Drag 'n' drop some files here, or click to select files</p>
+                        <p>Drag and drop a file here</p>
+                        <div className={classes.break}></div>
+                        <a className={classes.MockButton}>
+                            <span className={classes.away}>Or click to select a file</span>
+                            <span class={classes.over}>Max File Size: 30MB</span>
+                        </a>
 
                     </div>
 
@@ -87,7 +92,15 @@ export default class Upload extends Component {
         </Dropzone>
 
         if (this.state.isLoading) {
-            dropZone = <div className={classes.Loader}>Loading...</div>
+            dropZone = <>
+                <div className={classes.Loader}>
+                    Loader
+                </div>
+                <div className={classes.break}></div>
+                <h1> Please Wait While We Classify Your Image</h1>
+                <div className={classes.break}></div>
+                <span style={{ fontSize: "5rem" }} role="img" aria-label="sheep">🤗</span>
+            </>
         }
 
         return (<div className={classes.Centre}>
