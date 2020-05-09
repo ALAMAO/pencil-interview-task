@@ -58,6 +58,11 @@ cd backend
 wget https://pjreddie.com/media/files/yolov3.weights -O data/yolov3.weights
 python convert.py --weights ./data/yolov3.weights --output ./checkpoints/yolov3.tf
 ```
+To verify the above is done correctly:
+```
+python backend.py
+```
+![Success Image](https://hochenrui.com/success.JPG)
 
 ### (Only do for the first time!) Set up the database
 ```
