@@ -97,7 +97,7 @@ export default class Upload extends Component {
                     Loader
                 </div>
                 <div className={classes.break}></div>
-                <h1> Please Wait While We Classify Your Image</h1>
+                <h1 style={{ color: "rgb(0,37,53)" }}> Please Wait While We Classify Your Image</h1>
                 <div className={classes.break}></div>
                 <span style={{ fontSize: "5rem" }} role="img" aria-label="sheep">🤗</span>
             </>
