@@ -36,7 +36,7 @@ class Output extends React.Component {
             .then((response) => {
                 const data = response.data[0]
                 const newRatio = this.getRatio(data.width, window.innerWidth, data.height, window.innerHeight)
-                const boxes = this.unpackMarks(data.boxes, newRatio)
+                const boxes = this.unpackMarks(data.boxes, newRatio, data.width, data.height)
                 this.setState({
                     ratio: newRatio,
                     loading: false,
@@ -122,7 +122,7 @@ class Output extends React.Component {
         }
     }
 
-    unpackMarks = (rawJsonArray, ratio) => {
+    unpackMarks = (rawJsonArray, ratio, originalWidth, originalHeight) => {
         let newArray = []
         rawJsonArray.forEach(element => {
             newArray.push({
@@ -132,8 +132,8 @@ class Output extends React.Component {
                     type: "RECT",
                     x: element.x * ratio,
                     y: element.y * ratio,
-                    width: element.width * ratio,
-                    height: element.height * ratio
+                    width: element.width * originalWidth * ratio,
+                    height: element.height * originalHeight * ratio
                 }
             })
         });
