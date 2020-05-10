@@ -245,12 +245,12 @@ ALTER SEQUENCE public.auth_user_user_permissions_id_seq OWNED BY public.auth_use
 CREATE TABLE public.box (
     id integer NOT NULL,
     label character varying(100),
-    label_probability double precision,
+    probability double precision,
     inserted_at timestamp with time zone NOT NULL,
     image_id character varying(255),
     height double precision NOT NULL,
-    top_left_x_coordinate double precision NOT NULL,
-    top_left_y_coordinate double precision NOT NULL,
+    x double precision NOT NULL,
+    y double precision NOT NULL,
     width double precision NOT NULL
 );
 
@@ -568,13 +568,21 @@ COPY public.auth_user_groups (id, user_id, group_id) FROM stdin;
 COPY public.auth_user_user_permissions (id, user_id, permission_id) FROM stdin;
 \.
 
+--
+-- Data for Name: image; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.image (id, file, inserted_at, height, width) FROM stdin;
+123	static/images/123.jpg	2020-05-09 10:43:54.7077+00	456	810
+\.
+
 
 --
 -- Data for Name: box; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.box (id, label, label_probability, inserted_at, image_id, height, top_left_x_coordinate, top_left_y_coordinate, width) FROM stdin;
-1	cat	1	2020-05-09 10:46:31.158675+00	123	200	20	20	300
+COPY public.box (id, label, probability, inserted_at, image_id, height, x, y, width) FROM stdin;
+1	testing	1	2020-05-09 10:46:31.158675+00	123	0.5	0.5	0.2	0.2
 \.
 
 
@@ -635,15 +643,6 @@ COPY public.django_migrations (id, app, name, applied) FROM stdin;
 --
 
 COPY public.django_session (session_key, session_data, expire_date) FROM stdin;
-\.
-
-
---
--- Data for Name: image; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.image (id, file, inserted_at, height, width) FROM stdin;
-123	static/images/123.jpg	2020-05-09 10:43:54.7077+00	456	810
 \.
 
 
@@ -1064,3 +1063,4 @@ ALTER TABLE ONLY public.django_admin_log
 --
 -- PostgreSQL database dump complete
 --
+

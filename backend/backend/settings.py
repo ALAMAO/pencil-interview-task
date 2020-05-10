@@ -122,6 +122,8 @@ USE_L10N = True
 
 USE_TZ = True
 
+# Enable CORS Whitelist 
+CORS_ORIGIN_ALLOW_ALL = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
@@ -129,4 +131,4 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'backend')
+MEDIA_ROOT = os.path.join(BASE_DIR)

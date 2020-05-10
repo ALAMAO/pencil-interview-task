@@ -4,18 +4,22 @@ import {
   Switch,
   Route
 } from "react-router-dom"
-import Upload from "./Upload.jsx"
+import Upload from "./components/Upload/Upload"
 import Output from "./Output.jsx"
+import Navbar from "./components/NavBar/NavBar"
 
-export default function App() {
+export default function App(props) {
   return (
-    <Router>
-      {/* A <Switch> looks through its children <Route>s and
+    <>
+      <Navbar />
+      <Router>
+        {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
-      <Switch>
-        <Route path="/output/:imageHash" component={Output} />
-        <Route path="/" component={Upload} />
-      </Switch>
-    </Router>
+        <Switch>
+          <Route path="/output/:imageHash" component={Output} />
+          <Route path="/" component={Upload} />
+        </Switch>
+      </Router>
+    </>
   )
 }
