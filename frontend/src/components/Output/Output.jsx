@@ -4,6 +4,8 @@ import axios from '../../Api'
 import Loader from 'react-loader-spinner'
 import './Output.css'
 
+const WINDOW_RESIZE_MULTIPLIER = 0.7
+
 class Output extends React.Component {
     constructor(props) {
         super(props);
@@ -27,8 +29,9 @@ class Output extends React.Component {
             annotations: [],
             originalWidth: 0,
             originalHeight: 0,
-            width: window.outerWidth,
-            height: window.outerHeight,
+            width: window.outerWidth * WINDOW_RESIZE_MULTIPLIER,
+            height: window.outerHeight * WINDOW_RESIZE_MULTIPLIER,
+            ratio: 1,
             loading: true,
             error: false,
             imageUrl: '',
@@ -91,7 +94,6 @@ class Output extends React.Component {
 
     // Event listeners and helper functions
     onResize = () => {
-        console.log("resize called")
         const newRatio = this.getRatio(this.state.originalWidth, this.state.originalHeight)
         this.setState({ ratio: newRatio, width: this.state.originalWidth * newRatio, height: this.state.originalHeight * newRatio });
     };
@@ -109,18 +111,18 @@ class Output extends React.Component {
     onSubmit = () => {
         const boxes = this.repackMarks(this.state.ratio, this.state.originalWidth, this.state.originalHeight);
         // PUT request to box update API
-        axios.put(`box/update/${this.state.imageHash}`, boxes)
+        axios.put(`box/update?image=${this.state.imageHash}`, boxes)
             .then(() => alert("Successfully updated box annotations in database!"))
             .catch(err => alert(err))
     }
 
     getRatio = (incomingWidth, incomingHeight) => {
-        const windowWidth = window.innerWidth
-        const windowHeight = window.innerHeight
-        if (incomingWidth < windowWidth * 0.8 && incomingHeight < windowWidth * 0.8) {
+        const resizedWindowWidth = window.innerWidth * WINDOW_RESIZE_MULTIPLIER
+        const resizedWindowHeight = window.innerHeight * WINDOW_RESIZE_MULTIPLIER
+        if (incomingWidth < resizedWindowHeight && incomingHeight < resizedWindowWidth) {
             return 1
         } else {
-            return Math.min((windowWidth * 0.8) / incomingWidth, (windowHeight * 0.8) / incomingHeight)
+            return Math.min(resizedWindowWidth / incomingWidth, resizedWindowHeight / incomingHeight)
         }
     }
 
@@ -165,8 +167,9 @@ class Output extends React.Component {
 
     fetchImageBoxes = () => {
         this.setState({ loading: true, error: false })
-        axios.get('image/get') // + this.state.imageHash,)
+        axios.get(`image/get?id=${this.state.imageHash}`)
             .then((response) => {
+                console.log(response)
                 const data = response.data[0]
                 const newRatio = this.getRatio(data.width, data.height)
                 const boxes = this.unpackMarks(data.boxes, newRatio, data.width, data.height)
@@ -180,11 +183,9 @@ class Output extends React.Component {
                     originalHeight: data.height,
                     annotations: boxes
                 })
-                console.log(response)
             })
             .catch((err) => {
                 this.setState({ loading: false, error: true })
-                alert(err)
                 console.log(err)
             })
     }
