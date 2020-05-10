@@ -38,11 +38,31 @@ def create_new(request):
 def get_details(request):
     try:
         sort_params = request.GET.dict()
-        boxs = Box.objects.filter(**sort_params)
+        box = Box.objects.filter(**sort_params)
         
-        response = serializers.serialize('json', boxs)
+        response = serializers.serialize('json', box)
 
         return HttpResponse(response, content_type="application/json")
+    except Exception as e:
+        return JsonResponse({
+            "message": str(e)
+        }, status = 400)
+
+@api_view(['PATCH'])
+def update_details(request):
+    try:
+        # finding row to update
+        sort_params = request.query_params.dict()
+        box = Box.objects.filter(**sort_params)
+
+        # updating row and saving changes to DB
+        data = json.loads(request.body.decode('utf-8'))
+        box.update(**data)
+
+        return JsonResponse({
+            "message": "success"
+        }, status = 200)
+
     except Exception as e:
         return JsonResponse({
             "message": str(e)
