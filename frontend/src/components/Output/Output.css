@@ -1,5 +1,5 @@
 .rp-image {
-    border: 5px solid white;
+    border: 5px solid hsl(237, 32%, 12%);
     border-radius: 5px;
 }
 
@@ -7,7 +7,7 @@
     display: inline-block;
     width: 100%;
     text-align: center;
-    background-color: whitesmoke;
+    background-color: white;
     margin-top: 77px; /* This is to account for the NavBar*/
 }
 
