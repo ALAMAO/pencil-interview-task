@@ -41,7 +41,7 @@ export default class Upload extends Component {
 
                         //Send md5 hash AND file to DB
                         // *To-do: Change the url here
-                        axios.post("https://httpbin.org/post", formData, {
+                        axios.post("http://localhost:8000/image/new", formData, {
                             headers: {
                                 'Content-Type': 'multipart/form-data'
                             }
@@ -59,7 +59,7 @@ export default class Upload extends Component {
                     var md5 = CryptoJS.MD5(binary).toString();
 
                     formData.append("file", file)
-                    formData.append("md5", md5)
+                    formData.append("id", md5)
 
                 };
                 reader.readAsDataURL(file);
