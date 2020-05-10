@@ -26,6 +26,7 @@ class Output extends React.Component {
             width: window.outerWidth,
             height: window.outerHeight,
             loading: true,
+            error: false,
             imageUrl: ''
         }
     }
@@ -42,12 +43,13 @@ class Output extends React.Component {
                     loading: false,
                     imageUrl: 'http://localhost:8000/media/' + data.file,
                     width: data.width,
-                    height: data.height
+                    height: data.height,
+                    annotations: boxes
                 })
                 console.log(response)
             })
             .catch((err) => {
-                this.setState({ loading: false })
+                this.setState({ loading: false, error: true })
                 alert(err)
                 console.log(err)
             })
@@ -69,9 +71,15 @@ class Output extends React.Component {
                     />
                 </div>
             )
+        } else if (this.state.error) {
+            return (
+                <div className="output-wrapper">
+                    <p> Error in fetching resources. Please reload the page and try again. </p>
+                </div>
+            )
         } else {
             return (
-                <div style={{ display: "inline-block", width: "100%", textAlign: "center" }}>
+                <div className="output-wrapper">
                     <p>{this.state.imageHash}</p>
                     <h4>Annotations</h4>
                     <button onClick={this.onSubmit}>Submit changes</button>
@@ -130,8 +138,8 @@ class Output extends React.Component {
                 comment: element.label,
                 mark: {
                     type: "RECT",
-                    x: element.x * ratio,
-                    y: element.y * ratio,
+                    x: element.x * originalWidth * ratio,
+                    y: element.y * originalHeight * ratio,
                     width: element.width * originalWidth * ratio,
                     height: element.height * originalHeight * ratio
                 }

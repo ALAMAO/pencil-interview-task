@@ -1,3 +1,9 @@
 .rp-image {
     border: 5px solid black;
 }
+
+.output-wrapper {
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+}
