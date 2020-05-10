@@ -28,6 +28,7 @@ urlpatterns = [
     # Box
     path('box/new', box.create_new, name='create_new'),
     path('box/get', box.get_details, name='get_details'),
+    path('box/update', box.update_details, name='update_details'),
 
     # Image
     path('image/new', image.create_new, name='create_new'),
