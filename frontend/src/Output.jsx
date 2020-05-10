@@ -23,6 +23,8 @@ class Output extends React.Component {
                     }
                 }
             ],
+            originalWidth: 0,
+            originalHeight: 0,
             width: window.outerWidth,
             height: window.outerHeight,
             loading: true,
@@ -36,14 +38,16 @@ class Output extends React.Component {
         axios.get('image/get') //+ this.props.match.params.imageHash,)
             .then((response) => {
                 const data = response.data[0]
-                const newRatio = this.getRatio(data.width, window.innerWidth, data.height, window.innerHeight)
+                const newRatio = this.getRatio(data.width, data.height)
                 const boxes = this.unpackMarks(data.boxes, newRatio, data.width, data.height)
                 this.setState({
                     ratio: newRatio,
                     loading: false,
                     imageUrl: 'http://localhost:8000/media/' + data.file,
-                    width: data.width,
-                    height: data.height,
+                    width: data.width * newRatio,
+                    height: data.height * newRatio,
+                    originalWidth: data.width,
+                    originalHeight: data.height,
                     annotations: boxes
                 })
                 console.log(response)
@@ -104,7 +108,8 @@ class Output extends React.Component {
 
     onResize = () => {
         console.log("resize called")
-        this.setState({ width: window.outerWidth, height: window.outerHeight });
+        const newRatio = this.getRatio(this.state.originalWidth, this.state.originalHeight)
+        this.setState({ ratio: newRatio, width: this.state.originalWidth * newRatio, height: this.state.originalHeight * newRatio });
     };
 
     onSelect(id) {
@@ -122,7 +127,9 @@ class Output extends React.Component {
         // TODO: axios.put() 
     }
     
-    getRatio = (incomingWidth, windowWidth, incomingHeight, windowHeight) => {
+    getRatio = (incomingWidth, incomingHeight) => {
+        const windowWidth = window.innerWidth
+        const windowHeight = window.innerHeight
         if (incomingWidth < windowWidth * 0.8 && incomingHeight < windowWidth * 0.8) {
             return 1
         } else {
