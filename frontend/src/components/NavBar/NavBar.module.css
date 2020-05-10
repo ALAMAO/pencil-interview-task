@@ -21,6 +21,7 @@
     position: fixed;
     background-color: white;
     border-bottom: 4px solid whitesmoke;
+    z-index: 999;
 }
     .Subtext {
         width: 253.154px;
