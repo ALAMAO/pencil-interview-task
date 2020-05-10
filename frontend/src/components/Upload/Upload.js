@@ -9,9 +9,9 @@ export default class Upload extends Component {
     constructor(props) {
         super(props);
 
-        this.onDropRejected = (files) => {
-            console.log(files)
-        }
+        // this.onDropRejected = (files) => {
+        //     console.log(files)
+        // }
 
         this.onDrop = (files) => {
             try {
@@ -76,18 +76,41 @@ export default class Upload extends Component {
 
 
     render() {
+        const minSizeInMB = 0;
+        const maxSizeInMB = 1;
 
         let dropRej;
 
         let dropZone = <Dropzone
             onDropAccepted={this.onDrop}
-            onDropRejected={() => {
-                dropRej = <span className={classes.Danger}>
-                    File is too large, please try a smaller one
-                    </span>
+            onDropRejected={(fileRejections) => {
+                console.log(fileRejections)
+
+                const errorMessages = []
+
+                const errObject = fileRejections[0].errors
+                errObject.forEach(errorObj => {
+                    let errorCode = errorObj.code
+
+                    switch (errorCode) {
+                        case "file-invalid-type":
+                            errorMessages.push(<><span className={classes.Danger}>Please upload an image file of type jpg, jpeg or png </span> <div className={classes.break}></div></>)
+                            break;
+                        case "file-too-large":
+                            errorMessages.push(<><span className={classes.Danger}>File is too large. Max size: {maxSizeInMB} MB </span> <div className={classes.break}></div></>)
+                            break;
+                        default:
+                            errorMessages.push(<><span className={classes.Danger}>"Unidentified Error" </span> <div className={classes.break}></div></>)
+                    }
+                })
+
+
+
+                dropRej = errorMessages
             }}
-            minSize={0}
-            maxSize={5242880}
+            minSize={1048576 * minSizeInMB}
+            maxSize={1048576 * maxSizeInMB}
+            accept={'image/*'}
         >
             {({ getRootProps, getInputProps, fileRejections }) => (
                 <section >

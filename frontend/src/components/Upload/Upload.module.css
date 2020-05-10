@@ -30,7 +30,7 @@
     box-sizing: border-box;
     padding: 10px;
     border-radius: 15px;
-    height: 270px;
+    height: 330px;
     font-size: 13pt;
     flex-wrap: wrap;
     background-color: rgb(255,255,255);
@@ -165,10 +165,10 @@ img {
   }
 }
 
-@media (min-width:500px ) and (min-height:500px) {
+@media (min-width:500px ) and (min-height:600px) {
   .Card {
     width: 60vw;
-    height:60vh;
+    height:62vh;
     font-size:1.5rem
   }
 
