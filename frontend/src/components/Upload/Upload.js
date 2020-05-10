@@ -10,9 +10,27 @@ export default class Upload extends Component {
     constructor(props) {
         super(props);
 
-        // this.onDropRejected = (files) => {
-        //     console.log(files)
-        // }
+        this.onDropRejected = (fileRejections) => {
+
+            const errorMessages = []
+            const errObject = fileRejections[0].errors
+
+            errObject.forEach(errorObj => {
+                let errorCode = errorObj.code
+
+                switch (errorCode) {
+                    case "file-invalid-type":
+                        errorMessages.push(<React.Fragment key={errorCode}><span className={classes.Danger}>{config.errorMessages.invalidFileMessage} </span> <div className={classes.break}></div></React.Fragment>)
+                        break;
+                    case "file-too-large":
+                        errorMessages.push(<React.Fragment key={errorCode}><span className={classes.Danger}>{config.errorMessages.fileSizeExceedMessage(config.sizeRestrictions.maxSizeInMB)}</span> <div className={classes.break}></div></React.Fragment>)
+                        break;
+                    default:
+                        errorMessages.push(<React.Fragment key={errorCode}><span className={classes.Danger}>"Unidentified Error" </span> <div className={classes.break}></div></React.Fragment>)
+                }
+            })
+            this.setState({ errMsg: errorMessages })
+        }
 
         this.onDrop = (files) => {
             try {
@@ -70,41 +88,19 @@ export default class Upload extends Component {
         };
         this.state = {
             files: [],
-            isLoading: false
+            isLoading: false,
+            errMsg: []
         };
     }
 
 
     render() {
 
-        let dropRej;
 
         let dropZone = <Dropzone
             onDropAccepted={this.onDrop}
             onDropRejected={(fileRejections) => {
-                console.log(fileRejections)
-
-                const errorMessages = []
-
-                const errObject = fileRejections[0].errors
-                errObject.forEach(errorObj => {
-                    let errorCode = errorObj.code
-
-                    switch (errorCode) {
-                        case "file-invalid-type":
-                            errorMessages.push(<><span className={classes.Danger}>{config.errorMessages.invalidFileMessage} </span> <div className={classes.break}></div></>)
-                            break;
-                        case "file-too-large":
-                            errorMessages.push(<><span className={classes.Danger}>{config.errorMessages.fileSizeExceedMessage(config.sizeRestrictions.maxSizeInMB)}</span> <div className={classes.break}></div></>)
-                            break;
-                        default:
-                            errorMessages.push(<><span className={classes.Danger}>"Unidentified Error" </span> <div className={classes.break}></div></>)
-                    }
-                })
-
-
-
-                dropRej = errorMessages
+                return this.onDropRejected(fileRejections);
             }}
             minSize={1048576 * config.sizeRestrictions.minSizeInMB}
             maxSize={1048576 * config.sizeRestrictions.maxSizeInMB}
@@ -124,7 +120,7 @@ export default class Upload extends Component {
                         <input {...getInputProps()} />
                         <p>Drag and drop a file here</p>
                         <div className={classes.break}></div>
-                        {dropRej}
+                        {this.state.errMsg}
                         <div className={classes.break}></div>
                         {/* eslint-disable-next-line */}
                         <a className={classes.MockButton}>
