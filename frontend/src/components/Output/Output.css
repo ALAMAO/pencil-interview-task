@@ -1,11 +1,14 @@
 .rp-image {
-    border: 5px solid black;
+    border: 5px solid white;
+    border-radius: 5px;
 }
 
 .output-wrapper {
     display: inline-block;
     width: 100%;
     text-align: center;
+    background-color: whitesmoke;
+    margin-top: 77px; /* This is to account for the NavBar*/
 }
 
 button {
