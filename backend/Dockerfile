@@ -19,9 +19,6 @@ RUN pip install --upgrade pip
 COPY ./requirements.txt /usr/src/app/requirements.txt
 RUN pip install -r requirements.txt
 
-# Install Tensorflow
-RUN  pip install opencv-python
-
 WORKDIR /usr/src/app/backend
 RUN cd data && curl -O https://pjreddie.com/media/files/yolov3.weights
 RUN python convert.py --weights ./data/yolov3.weights --output ./checkpoints/yolov3.tf
