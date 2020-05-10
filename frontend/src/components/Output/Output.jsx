@@ -1,6 +1,6 @@
 import React from 'react'
 import { ReactPictureAnnotation } from 'react-picture-annotation'
-import axios from './Api'
+import axios from '../../Api'
 import Loader from 'react-loader-spinner'
 import './Output.css'
 
@@ -10,7 +10,8 @@ class Output extends React.Component {
         this.setState = this.setState.bind(this);
         // retrieve the image hash from url parameter
         this.state = {
-            annotations: [
+            // Annotations example
+            /* annotations: [
                 {
                     id: "123",
                     comment: "cat",
@@ -22,41 +23,23 @@ class Output extends React.Component {
                         height: 300
                     }
                 }
-            ],
+            ], */
+            annotations: [],
             originalWidth: 0,
             originalHeight: 0,
             width: window.outerWidth,
             height: window.outerHeight,
             loading: true,
             error: false,
-            imageUrl: ''
+            imageUrl: '',
+            imageHash: this.props.match.params.imageHash
         }
     }
 
     componentDidMount() {
         window.addEventListener('resize', this.onResize);
-        axios.get('image/get') //+ this.props.match.params.imageHash,)
-            .then((response) => {
-                const data = response.data[0]
-                const newRatio = this.getRatio(data.width, data.height)
-                const boxes = this.unpackMarks(data.boxes, newRatio, data.width, data.height)
-                this.setState({
-                    ratio: newRatio,
-                    loading: false,
-                    imageUrl: 'http://localhost:8000/media/' + data.file,
-                    width: data.width * newRatio,
-                    height: data.height * newRatio,
-                    originalWidth: data.width,
-                    originalHeight: data.height,
-                    annotations: boxes
-                })
-                console.log(response)
-            })
-            .catch((err) => {
-                this.setState({ loading: false, error: true })
-                alert(err)
-                console.log(err)
-            })
+        // Retrieve image URL given the corresponding image hash
+        this.fetchImageBoxes();
     }
 
     componentWillUnmount() {
@@ -79,12 +62,12 @@ class Output extends React.Component {
             return (
                 <div className="output-wrapper">
                     <p> Error in fetching resources. Please reload the page and try again. </p>
+                    <button onClick={this.fetchImageBoxes}>Retry?</button>
                 </div>
             )
         } else {
             return (
                 <div className="output-wrapper">
-                    <p>{this.state.imageHash}</p>
                     <h4>Annotations</h4>
                     <button onClick={this.onSubmit}>Submit changes</button>
                     <div style={{ marginRight: "auto", marginLeft: (window.innerWidth - this.state.width) / 2, marginTop: "1vw", textAlign: "center" }}>
@@ -106,6 +89,7 @@ class Output extends React.Component {
         }
     }
 
+    // Event listeners and helper functions
     onResize = () => {
         console.log("resize called")
         const newRatio = this.getRatio(this.state.originalWidth, this.state.originalHeight)
@@ -113,7 +97,7 @@ class Output extends React.Component {
     };
 
     onSelect(id) {
-        console.log(id)
+        // console.log(id)
     }
 
     onChange = (annotations) => {
@@ -123,10 +107,13 @@ class Output extends React.Component {
     }
 
     onSubmit = () => {
-        console.log(this.state.annotations)
-        // TODO: axios.put() 
+        const boxes = this.repackMarks(this.state.ratio, this.state.originalWidth, this.state.originalHeight);
+        // PUT request to box update API
+        axios.put(`box/update/${this.state.imageHash}`, boxes)
+            .then(() => alert("Successfully updated box annotations in database!"))
+            .catch(err => alert(err))
     }
-    
+
     getRatio = (incomingWidth, incomingHeight) => {
         const windowWidth = window.innerWidth
         const windowHeight = window.innerHeight
@@ -140,9 +127,11 @@ class Output extends React.Component {
     unpackMarks = (rawJsonArray, ratio, originalWidth, originalHeight) => {
         let newArray = []
         rawJsonArray.forEach(element => {
+            element.probability = element.probability ?? 1.00
             newArray.push({
                 id: element.id,
-                comment: element.label,
+                comment: `${element.label} - ${element.probability.toFixed(2)}`,
+                originalLabel: element.label,
                 mark: {
                     type: "RECT",
                     x: element.x * originalWidth * ratio,
@@ -155,9 +144,49 @@ class Output extends React.Component {
         return newArray;
     }
 
-    // TODO
-    repackMarks = () => {
+    repackMarks = (ratio, originalWidth, originalHeight) => {
+        let newArray = []
+        this.state.annotations.forEach(element => {
+            // check if label contains probability. if label contains probability from server, strip it via regex group matching
+            const matchedLabel = element.comment.match(/(.+) - [0-1].[0-9]{2}/)
+            const label = matchedLabel == null ? element.comment : matchedLabel[1]
+            newArray.push({
+                id: element.id,
+                label: label,
+                x: element.mark.x / originalWidth / ratio,
+                y: element.mark.y / originalHeight / ratio,
+                width: element.mark.width / originalWidth / ratio,
+                height: element.mark.height / originalHeight / ratio,
+                probability: 1
+            })
+        })
+        return newArray;
+    }
 
+    fetchImageBoxes = () => {
+        this.setState({ loading: true, error: false })
+        axios.get('image/get') // + this.state.imageHash,)
+            .then((response) => {
+                const data = response.data[0]
+                const newRatio = this.getRatio(data.width, data.height)
+                const boxes = this.unpackMarks(data.boxes, newRatio, data.width, data.height)
+                this.setState({
+                    ratio: newRatio,
+                    loading: false,
+                    imageUrl: 'http://localhost:8000/media/' + data.file,
+                    width: data.width * newRatio,
+                    height: data.height * newRatio,
+                    originalWidth: data.width,
+                    originalHeight: data.height,
+                    annotations: boxes
+                })
+                console.log(response)
+            })
+            .catch((err) => {
+                this.setState({ loading: false, error: true })
+                alert(err)
+                console.log(err)
+            })
     }
 }
 

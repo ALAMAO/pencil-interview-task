@@ -5,7 +5,7 @@ import {
   Route
 } from "react-router-dom"
 import Upload from "./components/Upload/Upload"
-import Output from "./Output.jsx"
+import Output from "./components/Output/Output.jsx"
 
 export default function App(props) {
   return (
