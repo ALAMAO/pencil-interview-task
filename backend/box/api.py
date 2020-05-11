@@ -15,78 +15,44 @@ import json
 
 # Simplified version at the moment
 # Processing of bounding boxes will be done here
-@api_view(['POST'])
-@csrf_exempt
-def create_new(request):
-    try:
-        data = json.loads(request.body.decode('utf-8'))
-        box_form = BoxForm(data)
-
-        if box_form.is_valid():
-            box = box_form.save()
-            response = serializers.serialize("json", [box, ])
-
-            return HttpResponse(response, content_type='application/json')
-        
-        else:
-            return JsonResponse({"message": box_form.errors}, status=400)
-    except ObjectDoesNotExist as e:
-        return JsonResponse({"message": str(e)}, status=404)
-    except DataError as e:
-        return JsonResponse({"message": str(e)}, status=400)
-
-@api_view(['GET'])
-def get_details(request):
-    try:
-        sort_params = request.GET.dict()
-        box = Box.objects.filter(**sort_params)
-        
-        response = serializers.serialize('json', box)
-
-        return HttpResponse(response, content_type="application/json")
-    except Exception as e:
-        return JsonResponse({
-            "message": str(e)
-        }, status = 400)
-
 @api_view(['PUT'])
 def update_details(request):
-    try:
-        # Retrieve Existing Boxes
-        image_id = request.query_params['image_id']
-        boxes = Box.objects.filter(image_id=image_id)
-        boxes.delete()
+    image_id = request.query_params['image_id']
 
-        # updating row and saving changes to DB
-        data = json.loads(request.body.decode('utf-8'))
-        boxes = []
-        for box in data:
-            box_data = {
-                "image": image_id,
-                "x": box['x'],
-                "y": box['y'],
-                "height": box['height'],
-                "width": box['width'],
-                "label": box['label'],
-                "probability": box['probability']
-            }
+    # Retrieve Image
+    image = Image.objects.get(id=image_id)
+    image.manual_labelled = True
 
-            boxes.append(box_data)
-        
-        # save the boxes
-        with transaction.atomic():
-            for box in boxes:
-                box_form =  BoxForm(box)
-                box_form.save()
+    # Retrieve Existing Boxes
+    existing_boxes = Box.objects.filter(image_id=image_id)
 
-        return JsonResponse({
-            "message": "success"
-        }, status = 200)
+    # updating row and saving changes to DB
+    data = json.loads(request.body.decode('utf-8'))
+    new_boxes = []
+    for box in data:
+        box_data = {
+            "image": image_id,
+            "x": box['x'],
+            "y": box['y'],
+            "height": box['height'],
+            "width": box['width'],
+            "label": box['label'],
+            "probability": box['probability']
+        }
 
-    except Exception as e:
-        return JsonResponse({
-            "message": str(e)
-        }, status = 400)
+        new_boxes.append(box_data)
+    
+    # save the boxes
+    with transaction.atomic():
+        existing_boxes.delete()
+        for box in new_boxes:
+            box_form =  BoxForm(box)
+            box_form.save()
+        image.save()
+
+    return JsonResponse({
+        "message": "success"
+    }, status = 200)
 
 
 
