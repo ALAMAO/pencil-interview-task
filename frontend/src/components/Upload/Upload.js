@@ -9,86 +9,6 @@ import config from './config'
 export default class Upload extends Component {
     constructor(props) {
         super(props)
-
-        this.onDropRejected = (fileRejections) => {
-
-            const errorMessages = []
-            const errObject = fileRejections[0].errors
-
-            errObject.forEach(errorObj => {
-                let errorCode = errorObj.code
-
-                switch (errorCode) {
-                    case "file-invalid-type":
-                        errorMessages.push(<React.Fragment key={errorCode}><span className={classes.Danger}>{config.errorMessages.invalidFileMessage} </span> <div className={classes.break}></div></React.Fragment>)
-                        break
-                    case "file-too-large":
-                        errorMessages.push(<React.Fragment key={errorCode}><span className={classes.Danger}>{config.errorMessages.fileSizeExceedMessage(config.sizeRestrictions.maxSizeInMB)}</span> <div className={classes.break}></div></React.Fragment>)
-                        break
-                    default:
-                        errorMessages.push(<React.Fragment key={errorCode}><span className={classes.Danger}>"Unidentified Error" </span> <div className={classes.break}></div></React.Fragment>)
-                }
-            })
-            this.setState({ errMsg: errorMessages })
-        }
-
-        this.onDrop = (files) => {
-            try {
-                var that = this
-                this.setState({ files })
-                this.setState({ isLoading: true })
-
-
-                // Load File and convert to MD5 hash
-                var file = files[0]
-                var reader = new FileReader()
-                let formData = new FormData()
-                var img = new Image()
-
-                reader.onload = function (event) {
-
-                    let width, height
-                    img.src = reader.result
-
-                    // get image dimensions
-                    img.onload = function () {
-                        width = img.width
-                        height = img.height
-
-                        formData.append("width", width)
-                        formData.append("height", height)
-
-                        //Send md5 hash AND file to DB
-                        axios.post(`${config.endpoints.dbPostURL}`, formData, {
-                            headers: {
-                                'Content-Type': 'multipart/form-data'
-                            }
-                        })
-                            .then(res => {
-                                console.log(res.data)
-                                that.setState({ isLoading: false })
-                                return that.props.history.push(`/output/${md5}`)
-
-                            })
-                            .catch(err => {
-                                this.setState({ isLoading: false, errMsg: err })
-                                console.log(err)
-                            })
-                    }
-
-                    var binary = event.target.result
-                    var md5 = CryptoJS.MD5(binary).toString()
-
-                    formData.append("file", file)
-                    formData.append("id", md5)
-
-                }
-                reader.readAsDataURL(file)
-            }
-            catch (err) {
-                console.log(err)
-            }
-        }
         this.state = {
             files: [],
             isLoading: false,
@@ -96,10 +16,7 @@ export default class Upload extends Component {
         }
     }
 
-
     render() {
-
-
         let dropZone = <Dropzone
             onDropAccepted={this.onDrop}
             onDropRejected={(fileRejections) => {
@@ -109,7 +26,7 @@ export default class Upload extends Component {
             maxSize={1048576 * config.sizeRestrictions.maxSizeInMB}
             accept={'image/*'}
         >
-            {({ getRootProps, getInputProps, fileRejections }) => (
+            {({ getRootProps, getInputProps }) => (
                 <section >
                     <div {...getRootProps({ className: 'dropzone' })} className={classes.Card}>
 
@@ -154,5 +71,79 @@ export default class Upload extends Component {
             {dropZone}
         </div>
         )
+    }
+
+    onDropRejected = (fileRejections) => {
+        const errorMessages = []
+        const errObject = fileRejections[0].errors
+
+        errObject.forEach(errorObj => {
+            let errorCode = errorObj.code
+            switch (errorCode) {
+                case "file-invalid-type":
+                    errorMessages.push(<React.Fragment key={errorCode}><span className={classes.Danger}>{config.errorMessages.invalidFileMessage} </span> <div className={classes.break}></div></React.Fragment>)
+                    break
+                case "file-too-large":
+                    errorMessages.push(<React.Fragment key={errorCode}><span className={classes.Danger}>{config.errorMessages.fileSizeExceedMessage(config.sizeRestrictions.maxSizeInMB)}</span> <div className={classes.break}></div></React.Fragment>)
+                    break
+                default:
+                    errorMessages.push(<React.Fragment key={errorCode}><span className={classes.Danger}>"Unidentified Error" </span> <div className={classes.break}></div></React.Fragment>)
+            }
+        })
+        this.setState({ errMsg: errorMessages })
+    }
+
+    onDrop = (files) => {
+        try {
+            let that = this
+            this.setState({ files })
+            this.setState({ isLoading: true })
+            // Load File and convert to MD5 hash
+            let file = files[0]
+            let reader = new FileReader()
+            let formData = new FormData()
+            let img = new Image()
+
+            reader.onload = function (event) {
+                let width, height
+                img.src = reader.result
+                // get image dimensions
+                img.onload = function () {
+                    width = img.width
+                    height = img.height
+
+                    formData.append("width", width)
+                    formData.append("height", height)
+
+                    //Send md5 hash AND file to DB
+                    axios.post(`${config.endpoints.dbPostURL}`, formData, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data'
+                        }
+                    })
+                        .then(res => {
+                            console.log(res.data)
+                            that.setState({ isLoading: false })
+                            return that.props.history.push(`/output/${md5}`)
+
+                        })
+                        .catch(err => {
+                            console.log(err)
+                            that.setState({ isLoading: false, errMsg: err.message })
+                        })
+                }
+
+                var binary = event.target.result
+                var md5 = CryptoJS.MD5(binary).toString()
+
+                formData.append("file", file)
+                formData.append("id", md5)
+
+            }
+            reader.readAsDataURL(file)
+        }
+        catch (err) {
+            console.log(err)
+        }
     }
 }

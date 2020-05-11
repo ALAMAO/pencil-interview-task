@@ -1,8 +1,9 @@
+import { BASE_URL } from '../../Api'
 
 const config = {
     sizeRestrictions: {
         minSizeInMB: 0,
-        maxSizeInMB: 1,
+        maxSizeInMB: 5,
     },
     errorMessages: {
         invalidFileMessage: "Please upload an image file of type jpg, jpeg or png",
@@ -13,7 +14,7 @@ const config = {
         spinnerEmoji: `🤗`,
     },
     endpoints: {
-        dbPostURL: `http://localhost:8000/image/new`
+        dbPostURL: `${BASE_URL}/image/new`
     }
 }
 

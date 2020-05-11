@@ -1,7 +1,6 @@
 import React from 'react'
 import { ReactPictureAnnotation } from 'react-picture-annotation'
-import axios from '../../Api'
-import Loader from 'react-loader-spinner'
+import axios, { BASE_URL } from '../../Api'
 import './Output.css'
 
 const WINDOW_RESIZE_MULTIPLIER = 0.7
@@ -31,11 +30,13 @@ class Output extends React.Component {
             originalHeight: 0,
             width: window.outerWidth * WINDOW_RESIZE_MULTIPLIER,
             height: window.outerHeight * WINDOW_RESIZE_MULTIPLIER,
+            manualLabel: false,
             ratio: 1,
-            loading: true,
-            error: false,
             imageUrl: '',
-            imageHash: this.props.match.params.imageHash
+            imageHash: this.props.match.params.imageHash,
+            modified: false,
+            loading: true,
+            error: false
         }
     }
 
@@ -50,15 +51,12 @@ class Output extends React.Component {
     }
 
     render() {
+        let manualLabelText = ""
+        if (this.state.manualLabel) manualLabelText = <h4>This image has been manually labelled before.</h4>
         if (this.state.loading) {
             return (
-                <div style={{ display: "inline-block", width: "100%", textAlign: "center" }} >
-                    <Loader
-                        type="Puff"
-                        color="#00BFFF"
-                        height={100}
-                        width={100}
-                    />
+                <div className="output-wrapper" style={{ marginTop: "20vh" }} >
+                    <div className="Loader"></div>
                 </div>
             )
         } else if (this.state.error) {
@@ -71,7 +69,7 @@ class Output extends React.Component {
         } else {
             return (
                 <div className="output-wrapper">
-                    <h4>Annotations</h4>
+                    {manualLabelText}
                     <button onClick={this.onSubmit}>Submit changes</button>
                     <div style={{ marginRight: "auto", marginLeft: (window.innerWidth - this.state.width) / 2, marginTop: "1vw", textAlign: "center" }}>
                         <ReactPictureAnnotation
@@ -176,12 +174,13 @@ class Output extends React.Component {
                 this.setState({
                     ratio: newRatio,
                     loading: false,
-                    imageUrl: 'http://localhost:8000/media/' + data.file,
+                    imageUrl: `${BASE_URL}/media/` + data.file,
                     width: data.width * newRatio,
                     height: data.height * newRatio,
                     originalWidth: data.width,
                     originalHeight: data.height,
-                    annotations: boxes
+                    annotations: boxes,
+                    manualLabel: data.manual_labelled
                 })
             })
             .catch((err) => {
