@@ -77,7 +77,7 @@ export default class Upload extends Component {
                     var md5 = CryptoJS.MD5(binary).toString();
 
                     formData.append("file", file)
-                    formData.append("md5", md5)
+                    formData.append("id", md5)
 
                 };
                 reader.readAsDataURL(file);
