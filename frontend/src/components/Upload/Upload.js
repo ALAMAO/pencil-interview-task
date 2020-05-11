@@ -1,14 +1,14 @@
-import React, { Component } from 'react';
-import Dropzone from 'react-dropzone';
+import React, { Component } from 'react'
+import Dropzone from 'react-dropzone'
 import classes from './Upload.module.css'
-import CryptoJS from 'crypto-js';
-import axios from 'axios';
-import config from './config';
+import CryptoJS from 'crypto-js'
+import axios from 'axios'
+import config from './config'
 
 
 export default class Upload extends Component {
     constructor(props) {
-        super(props);
+        super(props)
 
         this.onDropRejected = (fileRejections) => {
 
@@ -21,10 +21,10 @@ export default class Upload extends Component {
                 switch (errorCode) {
                     case "file-invalid-type":
                         errorMessages.push(<React.Fragment key={errorCode}><span className={classes.Danger}>{config.errorMessages.invalidFileMessage} </span> <div className={classes.break}></div></React.Fragment>)
-                        break;
+                        break
                     case "file-too-large":
                         errorMessages.push(<React.Fragment key={errorCode}><span className={classes.Danger}>{config.errorMessages.fileSizeExceedMessage(config.sizeRestrictions.maxSizeInMB)}</span> <div className={classes.break}></div></React.Fragment>)
-                        break;
+                        break
                     default:
                         errorMessages.push(<React.Fragment key={errorCode}><span className={classes.Danger}>"Unidentified Error" </span> <div className={classes.break}></div></React.Fragment>)
                 }
@@ -34,20 +34,20 @@ export default class Upload extends Component {
 
         this.onDrop = (files) => {
             try {
-                var that = this;
+                var that = this
                 this.setState({ files })
-                this.setState({ isLoading: true });
+                this.setState({ isLoading: true })
 
 
                 // Load File and convert to MD5 hash
                 var file = files[0]
-                var reader = new FileReader();
+                var reader = new FileReader()
                 let formData = new FormData()
-                var img = new Image();
+                var img = new Image()
 
                 reader.onload = function (event) {
 
-                    let width, height;
+                    let width, height
                     img.src = reader.result
 
                     // get image dimensions
@@ -66,31 +66,34 @@ export default class Upload extends Component {
                         })
                             .then(res => {
                                 console.log(res.data)
-                                that.setState({ isLoading: false });
-                                return that.props.history.push(`/output/${md5}`);
+                                that.setState({ isLoading: false })
+                                return that.props.history.push(`/output/${md5}`)
 
                             })
-                            .catch(err => console.log(err))
+                            .catch(err => {
+                                this.setState({ isLoading: false, errMsg: err })
+                                console.log(err)
+                            })
                     }
 
-                    var binary = event.target.result;
-                    var md5 = CryptoJS.MD5(binary).toString();
+                    var binary = event.target.result
+                    var md5 = CryptoJS.MD5(binary).toString()
 
                     formData.append("file", file)
                     formData.append("id", md5)
 
-                };
-                reader.readAsDataURL(file);
+                }
+                reader.readAsDataURL(file)
             }
             catch (err) {
                 console.log(err)
             }
-        };
+        }
         this.state = {
             files: [],
             isLoading: false,
             errMsg: []
-        };
+        }
     }
 
 
@@ -100,7 +103,7 @@ export default class Upload extends Component {
         let dropZone = <Dropzone
             onDropAccepted={this.onDrop}
             onDropRejected={(fileRejections) => {
-                return this.onDropRejected(fileRejections);
+                return this.onDropRejected(fileRejections)
             }}
             minSize={1048576 * config.sizeRestrictions.minSizeInMB}
             maxSize={1048576 * config.sizeRestrictions.maxSizeInMB}
@@ -150,6 +153,6 @@ export default class Upload extends Component {
         return (<div className={classes.Centre}>
             {dropZone}
         </div>
-        );
+        )
     }
 }
