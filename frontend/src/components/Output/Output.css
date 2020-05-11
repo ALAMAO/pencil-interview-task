@@ -1,6 +1,6 @@
 .rp-image {
-  border: 5px solid hsl(237, 32%, 12%);
-  border-radius: 5px;
+  border: 1px solid hsl(237, 32%, 12%);
+  border-radius: 2px;
   background-color: white;
 }
 

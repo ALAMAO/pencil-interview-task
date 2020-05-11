@@ -1,46 +1,43 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500&display=swap');
-
 .Centre {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    align-content: center;
-    background-color: whitesmoke;
-    height: 100vh;
-    padding:20px;
-    flex-wrap: wrap;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  background-color: whitesmoke;
+  height: 100vh;
+  padding: 20px;
+  flex-wrap: wrap;
 }
 
 .Danger {
-      text-align: center;
-      font-size: 15px;
-      margin-bottom: 10px;
-
-      font-weight: bold;
-      color:red
+  text-align: center;
+  font-size: 15px;
+  margin-bottom: 10px;
+  font-weight: bold;
+  color: red
 }
 
 .Card {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    align-content: center;
-    width: 300px;
-    height: 360px;
-    border: 1px solid white;
-    box-sizing: border-box;
-    padding: 10px;
-    border-radius: 15px;
-    font-size: 13pt;
-    flex-wrap: wrap;
-    background-color: rgb(255,255,255);
-    position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  width: 300px;
+  height: 360px;
+  border: 1px solid white;
+  box-sizing: border-box;
+  padding: 10px;
+  border-radius: 15px;
+  font-size: 13pt;
+  flex-wrap: wrap;
+  background-color: rgb(255, 255, 255);
+  position: relative;
 }
 
 .Card:hover {
-  box-shadow: 0 5px 15px rgba(0,0,0,0.01), 0 5px 5px rgba(0,0,0,0.05);
-
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.01), 0 5px 5px rgba(0, 0, 0, 0.05);
 }
 
 .Info {
@@ -53,48 +50,53 @@
 }
 
 .MockButton {
-	 box-sizing: border-box;
-	 height: 30px;
-   width: 170px;
-   border-radius: 5px;
-	 display: table;
-	 font-size: 20px;
-	 font-weight: bold;
-	 box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.55);
-	 transition: background 0.5s;
-	 cursor: pointer;
+  box-sizing: border-box;
+  height: 30px;
+  width: 170px;
+  border-radius: 5px;
+  display: table;
+  font-size: 20px;
+  font-weight: bold;
+  box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.55);
+  transition: background 0.5s;
+  cursor: pointer;
 }
- .MockButton span {
-   width: 100%;
-   border-radius: 5px;
-	 height: 100%;
-	 padding: 20px;
-	 color: #2d3142;
-	 box-shadow: 0 0 0 3px #2d3142 inset;
-	 background: transparent;
+
+.MockButton span {
+  width: 100%;
+  border-radius: 5px;
+  height: 100%;
+  padding: 20px;
+  color: #2d3142;
+  box-shadow: 0 0 0 3px #2d3142 inset;
+  background: transparent;
 }
- .MockButton .away {
-	 display: table-cell;
-	 vertical-align: middle;
-	 text-align: center;
+
+.MockButton .away {
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
 }
- .MockButton .over {
-	 display: none;
+
+.MockButton .over {
+  display: none;
 }
- .MockButton:hover span.away {
-	 display: none;
+
+.MockButton:hover span.away {
+  display: none;
 }
- .MockButton:hover span.over {
-	 display: table-cell;
-	 vertical-align: middle;
-	 text-align: center;
-	 color: white;
-	 box-shadow: none;
+
+.MockButton:hover span.over {
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+  color: white;
+  box-shadow: none;
 }
- .MockButton:hover {
-	 background: #2d3142;
+
+.MockButton:hover {
+  background: #2d3142;
 }
- 
 
 .break {
   flex-basis: 100%;
@@ -103,7 +105,7 @@
 
 img {
   opacity: 0.3;
-  width:50px
+  width: 50px
 }
 
 .Loader {
@@ -121,36 +123,9 @@ img {
   -ms-transform: translateZ(0);
   transform: translateZ(0);
 }
+
 @-webkit-keyframes Load4 {
-  0%,
-  100% {
-    box-shadow: 0 -3em 0 0.2em, 2em -2em 0 0em, 3em 0 0 -1em, 2em 2em 0 -1em, 0 3em 0 -1em, -2em 2em 0 -1em, -3em 0 0 -1em, -2em -2em 0 0;
-  }
-  12.5% {
-    box-shadow: 0 -3em 0 0, 2em -2em 0 0.2em, 3em 0 0 0, 2em 2em 0 -1em, 0 3em 0 -1em, -2em 2em 0 -1em, -3em 0 0 -1em, -2em -2em 0 -1em;
-  }
-  25% {
-    box-shadow: 0 -3em 0 -0.5em, 2em -2em 0 0, 3em 0 0 0.2em, 2em 2em 0 0, 0 3em 0 -1em, -2em 2em 0 -1em, -3em 0 0 -1em, -2em -2em 0 -1em;
-  }
-  37.5% {
-    box-shadow: 0 -3em 0 -1em, 2em -2em 0 -1em, 3em 0em 0 0, 2em 2em 0 0.2em, 0 3em 0 0em, -2em 2em 0 -1em, -3em 0em 0 -1em, -2em -2em 0 -1em;
-  }
-  50% {
-    box-shadow: 0 -3em 0 -1em, 2em -2em 0 -1em, 3em 0 0 -1em, 2em 2em 0 0em, 0 3em 0 0.2em, -2em 2em 0 0, -3em 0em 0 -1em, -2em -2em 0 -1em;
-  }
-  62.5% {
-    box-shadow: 0 -3em 0 -1em, 2em -2em 0 -1em, 3em 0 0 -1em, 2em 2em 0 -1em, 0 3em 0 0, -2em 2em 0 0.2em, -3em 0 0 0, -2em -2em 0 -1em;
-  }
-  75% {
-    box-shadow: 0em -3em 0 -1em, 2em -2em 0 -1em, 3em 0em 0 -1em, 2em 2em 0 -1em, 0 3em 0 -1em, -2em 2em 0 0, -3em 0em 0 0.2em, -2em -2em 0 0;
-  }
-  87.5% {
-    box-shadow: 0em -3em 0 0, 2em -2em 0 -1em, 3em 0 0 -1em, 2em 2em 0 -1em, 0 3em 0 -1em, -2em 2em 0 0, -3em 0em 0 0, -2em -2em 0 0.2em;
-  }
-}
-@keyframes Load4 {
-  0%,
-  100% {
+  0%, 100% {
     box-shadow: 0 -3em 0 0.2em, 2em -2em 0 0em, 3em 0 0 -1em, 2em 2em 0 -1em, 0 3em 0 -1em, -2em 2em 0 -1em, -3em 0 0 -1em, -2em -2em 0 0;
   }
   12.5% {
@@ -176,28 +151,50 @@ img {
   }
 }
 
-@media (min-width:700px ) and (min-height:600px) {
+@keyframes Load4 {
+  0%, 100% {
+    box-shadow: 0 -3em 0 0.2em, 2em -2em 0 0em, 3em 0 0 -1em, 2em 2em 0 -1em, 0 3em 0 -1em, -2em 2em 0 -1em, -3em 0 0 -1em, -2em -2em 0 0;
+  }
+  12.5% {
+    box-shadow: 0 -3em 0 0, 2em -2em 0 0.2em, 3em 0 0 0, 2em 2em 0 -1em, 0 3em 0 -1em, -2em 2em 0 -1em, -3em 0 0 -1em, -2em -2em 0 -1em;
+  }
+  25% {
+    box-shadow: 0 -3em 0 -0.5em, 2em -2em 0 0, 3em 0 0 0.2em, 2em 2em 0 0, 0 3em 0 -1em, -2em 2em 0 -1em, -3em 0 0 -1em, -2em -2em 0 -1em;
+  }
+  37.5% {
+    box-shadow: 0 -3em 0 -1em, 2em -2em 0 -1em, 3em 0em 0 0, 2em 2em 0 0.2em, 0 3em 0 0em, -2em 2em 0 -1em, -3em 0em 0 -1em, -2em -2em 0 -1em;
+  }
+  50% {
+    box-shadow: 0 -3em 0 -1em, 2em -2em 0 -1em, 3em 0 0 -1em, 2em 2em 0 0em, 0 3em 0 0.2em, -2em 2em 0 0, -3em 0em 0 -1em, -2em -2em 0 -1em;
+  }
+  62.5% {
+    box-shadow: 0 -3em 0 -1em, 2em -2em 0 -1em, 3em 0 0 -1em, 2em 2em 0 -1em, 0 3em 0 0, -2em 2em 0 0.2em, -3em 0 0 0, -2em -2em 0 -1em;
+  }
+  75% {
+    box-shadow: 0em -3em 0 -1em, 2em -2em 0 -1em, 3em 0em 0 -1em, 2em 2em 0 -1em, 0 3em 0 -1em, -2em 2em 0 0, -3em 0em 0 0.2em, -2em -2em 0 0;
+  }
+  87.5% {
+    box-shadow: 0em -3em 0 0, 2em -2em 0 -1em, 3em 0 0 -1em, 2em 2em 0 -1em, 0 3em 0 -1em, -2em 2em 0 0, -3em 0em 0 0, -2em -2em 0 0.2em;
+  }
+}
+
+@media (min-width:700px) and (min-height:600px) {
   .Card {
     width: 60vw;
-    height:69vh;
-    font-size:1.5rem
+    height: 69vh;
+    font-size: 1.5rem
   }
-
   .MockButton {
-   width: 30vw;
-   font-size: 1.5rem;
-   
+    width: 30vw;
+    font-size: 1.5rem;
   }
-
   img {
-    width:14vh
+    width: 14vh
   }
   .Danger {
     font-size: 2rem;
   }
-
   .Info {
-  font-size: 1.2rem;
-}
-
+    font-size: 1.2rem;
+  }
 }
