@@ -6,6 +6,7 @@ from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view
 from django.utils.dateparse import parse_datetime
+from django.db import transaction
 
 from models.models import Box, Image
 from box.forms import BoxForm
@@ -48,16 +49,35 @@ def get_details(request):
             "message": str(e)
         }, status = 400)
 
-@api_view(['PATCH'])
+@api_view(['PUT'])
 def update_details(request):
     try:
-        # finding row to update
-        sort_params = request.query_params.dict()
-        box = Box.objects.filter(**sort_params)
+        # Retrieve Existing Boxes
+        image_id = request.query_params['image_id']
+        boxes = Box.objects.filter(image_id=image_id)
+        boxes.delete()
 
         # updating row and saving changes to DB
         data = json.loads(request.body.decode('utf-8'))
-        box.update(**data)
+        boxes = []
+        for box in data:
+            box_data = {
+                "image": image_id,
+                "x": box['x'],
+                "y": box['y'],
+                "height": box['height'],
+                "width": box['width'],
+                "label": box['label'],
+                "probability": box['probability']
+            }
+
+            boxes.append(box_data)
+        
+        # save the boxes
+        with transaction.atomic():
+            for box in boxes:
+                box_form =  BoxForm(box)
+                box_form.save()
 
         return JsonResponse({
             "message": "success"
@@ -67,3 +87,7 @@ def update_details(request):
         return JsonResponse({
             "message": str(e)
         }, status = 400)
+
+
+
+
