@@ -8,5 +8,6 @@ class ImageForm(forms.ModelForm):
             'id',
             'file',
             'height',
-            'width'
+            'width',
+            'manual_labelled'
         ]

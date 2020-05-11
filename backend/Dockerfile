@@ -27,5 +27,5 @@ RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 
 # Download YOLOv3 weights
-RUN curl -o ./data/yolov3.weights -O https://pjreddie.com/media/files/yolov3.weights
-RUN python convert.py --weights ./data/yolov3.weights --output ./checkpoints/yolov3.tf
+RUN curl -o ./yolov3_tf2/data/yolov3.weights -O https://pjreddie.com/media/files/yolov3.weights
+RUN python convert.py --weights ./yolov3_tf2/data/yolov3.weights --output ./yolov3_tf2/checkpoints/yolov3.tf

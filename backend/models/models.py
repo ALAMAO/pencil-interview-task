@@ -9,19 +9,20 @@ class Image(models.Model):
     
     id = models.CharField(primary_key=True, max_length=255)
     file = models.ImageField(upload_to="static/images")
-    height = models.FloatField(default=0)
-    width = models.FloatField(default=0)
+    height = models.FloatField()
+    width = models.FloatField()
     inserted_at = models.DateTimeField(default=timezone.now)
+    manual_labelled = models.BooleanField(default=False)
 
 class Box(models.Model):
     class Meta:
         db_table = "box"
     
     image = models.ForeignKey(Image, on_delete=models.SET_NULL, blank=True, null=True)
-    x = models.FloatField(default=0)
-    y = models.FloatField(default=0)
-    height = models.FloatField(default=0)
-    width = models.FloatField(default=0)
+    x = models.FloatField()
+    y = models.FloatField()
+    height = models.FloatField()
+    width = models.FloatField()
     label = models.CharField(max_length=100, blank=True, null=True)
     probability = models.FloatField(blank=True, null=True)
     inserted_at = models.DateTimeField(default=timezone.now)
