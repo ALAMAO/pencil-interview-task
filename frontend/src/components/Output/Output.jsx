@@ -111,7 +111,7 @@ class Output extends React.Component {
     onSubmit = () => {
         const boxes = this.repackMarks(this.state.ratio, this.state.originalWidth, this.state.originalHeight);
         // PUT request to box update API
-        axios.put(`box/update?image=${this.state.imageHash}`, boxes)
+        axios.put(`box/update?image_id=${this.state.imageHash}`, boxes)
             .then(() => alert("Successfully updated box annotations in database!"))
             .catch(err => alert(err))
     }
@@ -136,10 +136,10 @@ class Output extends React.Component {
                 originalLabel: element.label,
                 mark: {
                     type: "RECT",
-                    x: element.x * originalWidth * ratio,
-                    y: element.y * originalHeight * ratio,
-                    width: element.width * originalWidth * ratio,
-                    height: element.height * originalHeight * ratio
+                    x: element.x * originalWidth, //* ratio,
+                    y: element.y * originalHeight, //* ratio,
+                    width: element.width * originalWidth,// ratio,
+                    height: element.height * originalHeight// ratio
                 }
             })
         });
@@ -155,10 +155,10 @@ class Output extends React.Component {
             newArray.push({
                 id: element.id,
                 label: label,
-                x: element.mark.x / originalWidth / ratio,
-                y: element.mark.y / originalHeight / ratio,
-                width: element.mark.width / originalWidth / ratio,
-                height: element.mark.height / originalHeight / ratio,
+                x: element.mark.x / originalWidth, // / ratio,
+                y: element.mark.y / originalHeight, // / ratio,
+                width: element.mark.width / originalWidth, // / ratio,
+                height: element.mark.height / originalHeight, // / ratio,
                 probability: 1
             })
         })
