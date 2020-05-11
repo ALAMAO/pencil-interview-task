@@ -13,7 +13,7 @@ const config = {
         spinnerEmoji: `🤗`,
     },
     endpoints: {
-        dbPostURL: `https://httpbin.org/post`
+        dbPostURL: `http://localhost:8000/image/new`
     }
 }
 
