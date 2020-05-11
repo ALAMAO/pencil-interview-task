@@ -1,15 +1,15 @@
 .Container {
-    display: none;
-    flex-wrap: wrap;
+  display: none;
+  flex-wrap: wrap;
 }
 
 .Break {
-    flex-basis: 100%;
-    height: 0;
+  flex-basis: 100%;
+  height: 0;
 }
 
-@media (min-width:500px ) and (min-height:500px) {
-    .Container {
+@media (min-width:500px) and (min-height:500px) {
+  .Container {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -18,18 +18,15 @@
     width: 100%;
     height: 77px;
     padding-top: 10px;
-    position: fixed;
     background-color: white;
     border-bottom: 4px solid whitesmoke;
     z-index: 999;
-}
-    .Subtext {
-        width: 253.154px;
-        text-align: justify;
-        text-indent: 13px;
-        margin:10px;
-        font-style: italic;
-        
-    }
-
+  }
+  .Subtext {
+    width: 253.154px;
+    text-align: center;
+    text-indent: 13px;
+    margin: 10px;
+    font-style: italic;
+  }
 }
